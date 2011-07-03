@@ -17,85 +17,76 @@ package forplay.android;
 
 import forplay.core.Asserts;
 import forplay.core.GroupLayer;
+import forplay.core.GroupLayerImpl;
 import forplay.core.Layer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class AndroidGroupLayer extends AndroidLayer implements GroupLayer {
 
-  private List<AndroidLayer> children = new ArrayList<AndroidLayer>();
+  private GroupLayerImpl<AndroidLayer> impl = new GroupLayerImpl<AndroidLayer>();
+
+  @Override
+  public Layer get(int index) {
+    return impl.children.get(index);
+  }
 
   @Override
   public void add(Layer layer) {
     Asserts.checkArgument(layer instanceof AndroidLayer);
-    AndroidLayer jlayer = (AndroidLayer) layer;
-    children.add(jlayer);
-    jlayer.setParent(this);
-    jlayer.onAdd();
+    impl.add(this, (AndroidLayer) layer);
   }
 
   @Override
-  public void destroy() {
-    super.destroy();
-
-    for (AndroidLayer child : children) {
-      child.destroy();
-    }
+  public void add(int index, Layer layer) {
+    Asserts.checkArgument(layer instanceof AndroidLayer);
+    impl.add(this, index, (AndroidLayer) layer);
   }
 
   @Override
   public void remove(Layer layer) {
     Asserts.checkArgument(layer instanceof AndroidLayer);
-    AndroidLayer jlayer = (AndroidLayer) layer;
-    jlayer.onRemove();
-    children.remove(jlayer);
-    jlayer.setParent(null);
+    impl.remove(this, (AndroidLayer) layer);
+  }
+
+  @Override
+  public void remove(int index) {
+    impl.remove(this, index);
+  }
+
+  @Override
+  public void clear() {
+    impl.clear(this);
+  }
+
+  @Override
+  public int size() {
+    return impl.children.size();
+  }
+
+  @Override
+  public void destroy() {
+    super.destroy();
+    impl.destroy(this);
+  }
+
+  @Override
+  public void onAdd() {
+    super.onAdd();
+    impl.onAdd(this);
+  }
+
+  @Override
+  public void onRemove() {
+    super.onRemove();
+    impl.onRemove(this);
   }
 
   @Override
   void paint(AndroidCanvas surf) {
     surf.save();
     transform(surf);
-
-    for (AndroidLayer child : children) {
+    for (AndroidLayer child : impl.children) {
       child.paint(surf);
     }
-
     surf.restore();
-  }
-
-  @Override
-  public Layer get(int index) {
-    return children.get(index);
-  }
-
-  @Override
-  public void add(int index, Layer layer) {
-    Asserts.checkArgument(layer instanceof AndroidLayer);
-    AndroidLayer jlayer = (AndroidLayer) layer;
-    children.add(index, jlayer);
-    jlayer.setParent(this);
-    jlayer.onAdd();
-  }
-
-  @Override
-  public void remove(int index) {
-    AndroidLayer jlayer = children.get(index);
-    jlayer.onRemove();
-    children.remove(index);
-    jlayer.setParent(null);
-  }
-
-  @Override
-  public void clear() {
-    while (!children.isEmpty()) {
-      remove(children.size() - 1);
-    }
-  }
-
-  @Override
-  public int size() {
-    return children.size();
   }
 }
