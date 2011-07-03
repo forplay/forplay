@@ -18,7 +18,6 @@ package forplay.test.manualtests.core;
 import static forplay.core.ForPlay.*;
 
 import forplay.core.Color;
-import forplay.core.ForPlay;
 import forplay.core.Game;
 import forplay.core.Mouse;
 import forplay.core.SurfaceLayer;
@@ -30,7 +29,7 @@ public class ManualTestsGame implements Game, Mouse.Listener {
   @Override
   public void init() {
     // display basic instructions
-    ForPlay.log().info("Manual Tests. Right click to go to the next test.");
+    log().info("Manual Tests. Right click to go to the next test.");
 
     // add a listener for pointer (mouse, touch) input
     mouse().setListener(this);
@@ -52,8 +51,8 @@ public class ManualTestsGame implements Game, Mouse.Listener {
     bg.surface().fillRect(0, 0, bg.surface().width(), bg.surface().height());
     graphics().rootLayer().add(bg);
     
-    ForPlay.log().info("Starting " + currentTest().getName());
-    ForPlay.log().info(" Description: " + currentTest().getDescription());
+    log().info("Starting " + currentTest().getName());
+    log().info(" Description: " + currentTest().getDescription());
     currentTest().init();
   }
 

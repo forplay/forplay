@@ -16,15 +16,14 @@
 
 package forplay.test.manualtests.core;
 
-import forplay.core.Color;
-
-import forplay.core.ResourceCallback;
+import static forplay.core.ForPlay.*;
 
 import forplay.core.CanvasLayer;
-import forplay.core.ForPlay;
+import forplay.core.Color;
 import forplay.core.GroupLayer;
 import forplay.core.Image;
 import forplay.core.ImageLayer;
+import forplay.core.ResourceCallback;
 import forplay.core.SurfaceLayer;
 
 public class AlphaLayerTest extends ManualTest {
@@ -59,10 +58,10 @@ public class AlphaLayerTest extends ManualTest {
 
   @Override
   public void init() {
-    rootLayer = ForPlay.graphics().rootLayer();
+    rootLayer = graphics().rootLayer();
 
     // add a half white, half blue background
-    SurfaceLayer bg = ForPlay.graphics().createSurfaceLayer((int) (4 * width), (int) (4 * height));
+    SurfaceLayer bg = graphics().createSurfaceLayer((int) (4 * width), (int) (4 * height));
     bg.surface().setFillColor(Color.rgb(255, 255, 255));
     bg.surface().fillRect(0, 0, bg.surface().width(), bg.surface().height());
     bg.surface().setFillColor(Color.rgb(0, 0, 255));
@@ -71,24 +70,24 @@ public class AlphaLayerTest extends ManualTest {
     rootLayer.add(bg);
 
     // add a 50% transparent group layer
-    groupLayer = ForPlay.graphics().createGroupLayer();
+    groupLayer = graphics().createGroupLayer();
     groupLayer.setAlpha(0.5f);
     rootLayer.add(groupLayer);
 
-    image1 = ForPlay.assetManager().getImage(imageSrc);
+    image1 = assetManager().getImage(imageSrc);
     image1.addCallback(new ResourceCallback<Image>() {
       @Override
       public void done(Image image) {
         // once the image loads, create our layers
-        imageLayer1 = ForPlay.graphics().createImageLayer(image);
-        surfaceLayer1 = ForPlay.graphics().createSurfaceLayer(image.width(), image.height());
+        imageLayer1 = graphics().createImageLayer(image);
+        surfaceLayer1 = graphics().createSurfaceLayer(image.width(), image.height());
         surfaceLayer1.surface().drawImage(image, 0, 0);
-        canvasLayer1 = ForPlay.graphics().createCanvasLayer(image.width(), image.height());
+        canvasLayer1 = graphics().createCanvasLayer(image.width(), image.height());
         canvasLayer1.canvas().drawImage(image, 0, 0);
-        imageLayer2 = ForPlay.graphics().createImageLayer(image);
-        surfaceLayer2 = ForPlay.graphics().createSurfaceLayer(image.width(), image.height());
+        imageLayer2 = graphics().createImageLayer(image);
+        surfaceLayer2 = graphics().createSurfaceLayer(image.width(), image.height());
         surfaceLayer2.surface().drawImage(image, 0, 0);
-        canvasLayer2 = ForPlay.graphics().createCanvasLayer(image.width(), image.height());
+        canvasLayer2 = graphics().createCanvasLayer(image.width(), image.height());
         canvasLayer2.canvas().drawImage(image, 0, 0);
 
         // add layers to the groupLayer
@@ -115,23 +114,23 @@ public class AlphaLayerTest extends ManualTest {
 
       @Override
       public void error(Throwable err) {
-        ForPlay.log().error("Error loading image", err);
+        log().error("Error loading image", err);
       }
     });
 
     // add ground truth of 25% opaque image
-    imageGroundTruth = ForPlay.assetManager().getImage(imageGroundTruthSrc);
+    imageGroundTruth = assetManager().getImage(imageGroundTruthSrc);
     imageGroundTruth.addCallback(new ResourceCallback<Image>() {
       @Override
       public void done(Image image) {
-        groundTruthLayer = ForPlay.graphics().createImageLayer(image);
+        groundTruthLayer = graphics().createImageLayer(image);
         groundTruthLayer.transform().translate(3 * width, 0);
         rootLayer.add(groundTruthLayer);
       }
 
       @Override
       public void error(Throwable err) {
-        ForPlay.log().error("Error loading image", err);
+        log().error("Error loading image", err);
       }
     });
   }
