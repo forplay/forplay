@@ -23,8 +23,10 @@ import forplay.test.manualtests.core.ManualTestsGame;
 public class ManualTestsGameJava {
 
   public static void main(String[] args) {
-    JavaAssetManager assets = JavaPlatform.register().assetManager();
+    JavaPlatform platform = JavaPlatform.register();
+    JavaAssetManager assets = platform.assetManager();
     assets.setPathPrefix("src/forplay/test/manualtests/resources");
     ForPlay.run(new ManualTestsGame());
+    platform.setTitle("Manual Tests");
   }
 }

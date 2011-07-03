@@ -17,12 +17,14 @@ package forplay.test.manualtests.core;
 
 import static forplay.core.ForPlay.*;
 
+import forplay.core.Color;
 import forplay.core.ForPlay;
 import forplay.core.Game;
 import forplay.core.Mouse;
+import forplay.core.SurfaceLayer;
 
 public class ManualTestsGame implements Game, Mouse.Listener {
-  ManualTest[] tests = new ManualTest[] {new ImageTypeTest()/*, new YourTest()*/};
+  ManualTest[] tests = new ManualTest[] {new ImageTypeTest(), new AlphaLayerTest(), /*, new YourTest()*/};
   int currentTest;
 
   @Override
@@ -42,8 +44,14 @@ public class ManualTestsGame implements Game, Mouse.Listener {
   }
 
   void nextTest() {
-    graphics().rootLayer().clear();
     currentTest = (currentTest + 1) % tests.length;
+    // setup root layer for next test
+    graphics().rootLayer().clear();
+    SurfaceLayer bg = graphics().createSurfaceLayer(graphics().width(), graphics().height());
+    bg.surface().setFillColor(Color.rgb(255, 255, 255));
+    bg.surface().fillRect(0, 0, bg.surface().width(), bg.surface().height());
+    graphics().rootLayer().add(bg);
+    
     ForPlay.log().info("Starting " + currentTest().getName());
     ForPlay.log().info(" Description: " + currentTest().getDescription());
     currentTest().init();

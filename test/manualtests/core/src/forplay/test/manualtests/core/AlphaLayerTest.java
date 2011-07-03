@@ -27,17 +27,18 @@ import forplay.core.Image;
 import forplay.core.ImageLayer;
 import forplay.core.SurfaceLayer;
 
-public class ImageTypeTest extends ManualTest {
+public class AlphaLayerTest extends ManualTest {
   GroupLayer rootLayer;
 
   static float width = 100;
   static float height = 100;
   static int offset = 5;
-  static String imageSrc = "images/imagetypetest.png";
-  static String imageGroundTruthSrc = "images/imagetypetest_expected.png";
+  static String imageSrc = "images/alphalayertest.png";
+  static String imageGroundTruthSrc = "images/alphalayertest_expected.png";
 
   Image image1;
   Image imageGroundTruth;
+  GroupLayer groupLayer;
   ImageLayer imageLayer1;
   SurfaceLayer surfaceLayer1;
   CanvasLayer canvasLayer1;
@@ -48,17 +49,18 @@ public class ImageTypeTest extends ManualTest {
 
   @Override
   public String getName() {
-    return "ImageTypeTest";
+    return "AlphaLayerTest";
   }
 
   @Override
   public String getDescription() {
-    return "Test that image types display the same. Left-to-right: ImageLayer, SurfaceLayer, CanvasLayer, ground truth (expected).";
+    return "Test that the alpha value on layers works the same on all layer types and that alpha is 'additive'. Left-to-right: ImageLayer, SurfaceLayer, CanvasLayer, ground truth (expected). The first three layers all have alpha 50% and are in a grouplayer with alpha 50% (should result in a 25% opaque image).";
   }
 
   @Override
   public void init() {
     rootLayer = ForPlay.graphics().rootLayer();
+
     // add a half white, half blue background
     SurfaceLayer bg = ForPlay.graphics().createSurfaceLayer((int) (4 * width), (int) (4 * height));
     bg.surface().setFillColor(Color.rgb(255, 255, 255));
@@ -67,6 +69,11 @@ public class ImageTypeTest extends ManualTest {
     bg.surface().fillRect(0, bg.surface().width() / 2, bg.surface().width(),
         bg.surface().height() / 2);
     rootLayer.add(bg);
+
+    // add a 50% transparent group layer
+    groupLayer = ForPlay.graphics().createGroupLayer();
+    groupLayer.setAlpha(0.5f);
+    rootLayer.add(groupLayer);
 
     image1 = ForPlay.assetManager().getImage(imageSrc);
     image1.addCallback(new ResourceCallback<Image>() {
@@ -84,20 +91,26 @@ public class ImageTypeTest extends ManualTest {
         canvasLayer2 = ForPlay.graphics().createCanvasLayer(image.width(), image.height());
         canvasLayer2.canvas().drawImage(image, 0, 0);
 
-        // add layers to the rootLayer
+        // add layers to the groupLayer
         imageLayer1.transform().translate(offset, offset);
-        rootLayer.add(imageLayer1);
+        imageLayer1.setAlpha(0.5f);
+        groupLayer.add(imageLayer1);
         surfaceLayer1.transform().translate(offset + width, offset);
-        rootLayer.add(surfaceLayer1);
+        surfaceLayer1.setAlpha(0.5f);
+        groupLayer.add(surfaceLayer1);
         canvasLayer1.transform().translate(offset + 2 * width, offset);
-        rootLayer.add(canvasLayer1);
+        canvasLayer1.setAlpha(0.5f);
+        groupLayer.add(canvasLayer1);
 
         imageLayer2.transform().translate(offset, offset + 2 * height);
-        rootLayer.add(imageLayer2);
+        imageLayer2.setAlpha(0.5f);
+        groupLayer.add(imageLayer2);
         surfaceLayer2.transform().translate(offset + width, offset + 2 * height);
-        rootLayer.add(surfaceLayer2);
+        surfaceLayer2.setAlpha(0.5f);
+        groupLayer.add(surfaceLayer2);
         canvasLayer2.transform().translate(offset + 2 * width, offset + 2 * height);
-        rootLayer.add(canvasLayer2);
+        canvasLayer2.setAlpha(0.5f);
+        groupLayer.add(canvasLayer2);
       }
 
       @Override
@@ -106,6 +119,7 @@ public class ImageTypeTest extends ManualTest {
       }
     });
 
+    // add ground truth of 25% opaque image
     imageGroundTruth = ForPlay.assetManager().getImage(imageGroundTruthSrc);
     imageGroundTruth.addCallback(new ResourceCallback<Image>() {
       @Override

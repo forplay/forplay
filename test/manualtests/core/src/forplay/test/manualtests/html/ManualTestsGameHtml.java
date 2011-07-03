@@ -26,8 +26,11 @@ public class ManualTestsGameHtml extends HtmlGame {
 
   @Override
   public void start() {
-    HtmlAssetManager assets = HtmlPlatform.register().assetManager();
+    HtmlPlatform platform = HtmlPlatform.register();
+    HtmlAssetManager assets = platform.assetManager();
     assets.setPathPrefix("manualtestsgame/");
     ForPlay.run(new ManualTestsGame());
+    platform.setTitle("Manual Tests");
+    HtmlPlatform.disableRightClickContextMenu();
   }
 }
