@@ -161,24 +161,27 @@ Unless otherwise stated, all source files are licensed under the Apache License,
     License for the specific language governing permissions and limitations
     under the License.
 
-Additional license info:
+### Additional license info
 
-* Code under: core/gwtbox2d
-  URL: http://www.jbox2d.org/
-  License: zlib
-  Description: GWT-friendly adaptation of JBox2D.
-  Local Modifications: Various modifications to support cross-compilation to
+Code under `core/gwtbox2d`:
+
+* URL: http://www.jbox2d.org/
+* License: zlib
+* Description: GWT-friendly adaptation of JBox2D.
+* Local modifications: Various modifications to support cross-compilation to
   supported platforms.
 
-* Image resources under: sample/[cute peas]
-  URL: http://www.lostgarden.com/2007/03/lost-garden-license.html
-  License: Creative Commons (CC BY 3.0) - http://creativecommons.org/licenses/by/3.0/us/
-  Description: Game art resources created by Dan Cook.
+Image resources under `sample/(cute|peas)`:
 
-* Audio resources under: sample/noise
-  URL: http://www.freesound.org/
-  License: Creative Commons (various) - http://creativecommons.org/
-  Description: Sample audio resources from the Freesound project.
+* URL: http://www.lostgarden.com/2007/03/lost-garden-license.html
+* License: Creative Commons (CC BY 3.0) - http://creativecommons.org/licenses/by/3.0/us/
+* Description: Game art resources created by Dan Cook.
+
+Audio resources under `sample/noise`:
+
+* URL: http://www.freesound.org/
+* License: Creative Commons (various) - http://creativecommons.org/
+* Description: Sample audio resources from the Freesound project.
 
 [Java]: http://www.java.com/
 [Google Web Toolkit]: http://code.google.com/webtoolkit/
